@@ -778,10 +778,21 @@
             isSwiping = true;
             e.preventDefault();
             
-            // Only allow left swipe (go back)
-            if (deltaX < 0) {
-                const currentPage = submenuPages[submenuPages.length - 1];
-                if (currentPage) {
+            const currentPage = submenuPages[submenuPages.length - 1];
+            if (!currentPage) return;
+            
+            // For 3rd level pages (level >= 3), reverse swipe direction (right swipe = go back)
+            // For 2nd level pages, keep left swipe (go back)
+            if (currentLevel >= 3) {
+                // Right swipe (deltaX > 0) = go back
+                if (deltaX > 0) {
+                    const swipeProgress = Math.min(Math.abs(deltaX) / 200, 1);
+                    currentPage.style.transform = `translateX(${deltaX}px)`;
+                    currentPage.style.opacity = (1 - swipeProgress * 0.5).toString();
+                }
+            } else {
+                // Left swipe (deltaX < 0) = go back
+                if (deltaX < 0) {
                     const swipeProgress = Math.min(Math.abs(deltaX) / 200, 1);
                     currentPage.style.transform = `translateX(${deltaX}px)`;
                     currentPage.style.opacity = (1 - swipeProgress * 0.5).toString();
@@ -802,12 +813,30 @@
         
         const currentPage = submenuPages[submenuPages.length - 1];
         
-        if (currentPage && deltaX < -swipeThreshold) {
-            // Swipe completed - go back
-            goBack();
+        if (!currentPage) {
+            swipeStartX = null;
+            swipeStartY = null;
+            isSwiping = false;
+            return;
+        }
+        
+        // For 3rd level pages (level >= 3), reverse swipe direction (right swipe = go back)
+        // For 2nd level pages, keep left swipe (go back)
+        if (currentLevel >= 3) {
+            // Right swipe (deltaX > swipeThreshold) = go back
+            if (deltaX > swipeThreshold) {
+                goBack();
+            } else {
+                // Reset position
+                currentPage.style.transform = '';
+                currentPage.style.opacity = '';
+            }
         } else {
-            // Reset position
-            if (currentPage) {
+            // Left swipe (deltaX < -swipeThreshold) = go back
+            if (deltaX < -swipeThreshold) {
+                goBack();
+            } else {
+                // Reset position
                 currentPage.style.transform = '';
                 currentPage.style.opacity = '';
             }
@@ -907,6 +936,24 @@
     // Menu Toggle Functions
     // ============================================
     /**
+     * Create close button for menu overlay
+     */
+    function createMenuCloseButton() {
+        const closeButton = document.createElement('button');
+        closeButton.className = 'menu-close-btn';
+        closeButton.setAttribute('aria-label', 'Close menu');
+        closeButton.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>`;
+        closeButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeMenu();
+        });
+        return closeButton;
+    }
+
+    /**
      * Toggle menu open/close state
      */
     function toggleMenu() {
@@ -931,6 +978,12 @@
         // Prevent body scroll when menu is open
         if (isMenuOpen) {
             document.body.style.overflow = 'hidden';
+            // Add close button if it doesn't exist
+            let closeButton = menuOverlay.querySelector('.menu-close-btn');
+            if (!closeButton) {
+                closeButton = createMenuCloseButton();
+                menuOverlay.appendChild(closeButton);
+            }
             // Render main menu if not already rendered
             if (menuContent && menuContent.children.length === 0) {
                 renderMenu(menuData, menuContent, 1);
@@ -1168,6 +1221,14 @@
     // Prevent iOS Safari Bounce Scroll
     // ============================================
     let lastTouchY = 0;
+    
+    // Initialize lastTouchY on touchstart
+    document.addEventListener('touchstart', function(e) {
+        if (e.touches && e.touches.length > 0) {
+            lastTouchY = e.touches[0].clientY;
+        }
+    }, { passive: true });
+    
     document.addEventListener('touchmove', function(e) {
         const touchY = e.touches[0].clientY;
         const touchYDelta = touchY - lastTouchY;

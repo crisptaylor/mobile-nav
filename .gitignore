@@ -1,0 +1,7 @@
+# Cursor IDE files
+.cursor/
+
+# Plan files
+*.plan.md
+**/*.plan.md
+
