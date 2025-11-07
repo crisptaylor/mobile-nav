@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Skills & Expertise - Web Developer Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="top-navbar" role="navigation" aria-label="Main navigation">
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <div class="logo">Portfolio</div>
+    </nav>
+
+    <!-- Full-screen Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+        <nav class="menu-content" id="menuContent" role="navigation" aria-label="Main menu"></nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="content-area" id="mainContent">
+        <h1>Skills & Expertise</h1>
+        <p>I bring a diverse set of technical skills and expertise to every project. Here's an overview of my core competencies.</p>
+        <div class="content-card">
+            <h2>Frontend Development</h2>
+            <p>Proficient in HTML, CSS, JavaScript, and modern frameworks like React, Vue.js, and Angular. I create responsive, interactive user interfaces.</p>
+        </div>
+        <div class="content-card">
+            <h2>Backend Development</h2>
+            <p>Experienced in server-side technologies, API development, database design, and cloud services. I build robust and scalable backend systems.</p>
+        </div>
+        <div class="content-card">
+            <h2>Full Stack Solutions</h2>
+            <p>Capable of handling end-to-end development, from initial design to deployment, ensuring seamless integration between frontend and backend.</p>
+        </div>
+        <div class="content-card">
+            <h2>Tools & Technologies</h2>
+            <p>Familiar with version control (Git), build tools, testing frameworks, and modern development workflows that enhance productivity and code quality.</p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-navbar" role="navigation" aria-label="Bottom navigation">
+        <a href="index.html" class="nav-item" aria-label="Home">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="services.html" class="nav-item" aria-label="Projects">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="6" x2="12" y2="12"></line>
+                <line x1="16" y1="10" x2="12" y2="12"></line>
+            </svg>
+            <span class="nav-label">Projects</span>
+        </a>
+        <a href="contact.html" class="nav-item" aria-label="Contact">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="nav-label">Contact</span>
+        </a>
+        <a href="blog.html" class="nav-item" aria-label="Blog">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span class="nav-label">Blog</span>
+        </a>
+        <button class="cta-button" aria-label="Hire Me">
+            <span>Hire Me</span>
+        </button>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

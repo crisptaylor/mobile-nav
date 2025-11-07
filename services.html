@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Projects - Web Developer Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="top-navbar" role="navigation" aria-label="Main navigation">
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <div class="logo">Portfolio</div>
+    </nav>
+
+    <!-- Full-screen Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+        <nav class="menu-content" id="menuContent" role="navigation" aria-label="Main menu"></nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="content-area" id="mainContent">
+        <h1>My Projects</h1>
+        <p>Here are some of my recent projects showcasing my skills in web development, design, and problem-solving.</p>
+        <div class="content-card">
+            <h2>E-Commerce Platform</h2>
+            <p>A full-stack e-commerce solution built with modern frameworks, featuring responsive design and seamless user experience.</p>
+        </div>
+        <div class="content-card">
+            <h2>Portfolio Website</h2>
+            <p>A responsive portfolio website showcasing my work, built with clean code and beautiful design principles.</p>
+        </div>
+        <div class="content-card">
+            <h2>Web Application</h2>
+            <p>A dynamic web application with real-time features, demonstrating my expertise in modern JavaScript and API integration.</p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-navbar" role="navigation" aria-label="Bottom navigation">
+        <a href="index.html" class="nav-item" aria-label="Home">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="services.html" class="nav-item active" aria-label="Projects">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="6" x2="12" y2="12"></line>
+                <line x1="16" y1="10" x2="12" y2="12"></line>
+            </svg>
+            <span class="nav-label">Projects</span>
+        </a>
+        <a href="contact.html" class="nav-item" aria-label="Contact">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="nav-label">Contact</span>
+        </a>
+        <a href="blog.html" class="nav-item" aria-label="Blog">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span class="nav-label">Blog</span>
+        </a>
+        <button class="cta-button" aria-label="Hire Me">
+            <span>Hire Me</span>
+        </button>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
