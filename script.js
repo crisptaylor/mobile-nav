@@ -8,6 +8,275 @@
     'use strict';
 
     // ============================================
+    // Theme Management System
+    // ============================================
+    const THEME_STORAGE_KEY = 'portfolio-theme';
+    const THEMES = ['light', 'dark', 'colorful'];
+    
+    /**
+     * Detect system color scheme preference
+     * @returns {string} 'light' or 'dark'
+     */
+    function detectSystemPreference() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        return 'light';
+    }
+    
+    /**
+     * Get stored theme from localStorage
+     * @returns {string|null} Theme name or null if not stored
+     */
+    function getStoredTheme() {
+        try {
+            return localStorage.getItem(THEME_STORAGE_KEY);
+        } catch (e) {
+            console.warn('localStorage not available:', e);
+            return null;
+        }
+    }
+    
+    /**
+     * Store theme preference in localStorage
+     * @param {string} theme - Theme name to store
+     */
+    function storeTheme(theme) {
+        try {
+            localStorage.setItem(THEME_STORAGE_KEY, theme);
+        } catch (e) {
+            console.warn('localStorage not available:', e);
+        }
+    }
+    
+    /**
+     * Apply theme to the document
+     * @param {string} theme - Theme name ('light', 'dark', or 'colorful')
+     */
+    function setTheme(theme) {
+        if (!THEMES.includes(theme)) {
+            console.warn(`Invalid theme: ${theme}. Using 'light' as default.`);
+            theme = 'light';
+        }
+        
+        const html = document.documentElement;
+        html.setAttribute('data-theme', theme);
+        storeTheme(theme);
+        updateThemeSwitcherIcon(theme);
+    }
+    
+    /**
+     * Initialize theme on page load
+     * Priority: stored theme → system preference → default (light)
+     */
+    function initTheme() {
+        // Apply theme immediately to prevent flash of unstyled content
+        const storedTheme = getStoredTheme();
+        const systemTheme = detectSystemPreference();
+        const theme = storedTheme || systemTheme || 'light';
+        
+        // Apply theme before DOM is fully loaded
+        setTheme(theme);
+        
+        // Listen for system theme changes (if no stored preference)
+        if (!storedTheme && window.matchMedia) {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            mediaQuery.addEventListener('change', (e) => {
+                // Only update if user hasn't manually set a preference
+                if (!getStoredTheme()) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+    }
+    
+    /**
+     * Cycle through themes: light → dark → colorful → light
+     */
+    function cycleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const currentIndex = THEMES.indexOf(currentTheme);
+        const nextIndex = (currentIndex + 1) % THEMES.length;
+        const nextTheme = THEMES[nextIndex];
+        
+        setTheme(nextTheme);
+    }
+    
+    /**
+     * Update theme switcher icon based on current theme
+     * @param {string} theme - Current theme name
+     */
+    function updateThemeSwitcherIcon(theme) {
+        const switcher = document.getElementById('themeSwitcher');
+        if (!switcher) return;
+        
+        const icon = switcher.querySelector('.theme-switcher-icon');
+        if (!icon) return;
+        
+        const svgNS = 'http://www.w3.org/2000/svg';
+        
+        // Helper function to create SVG elements
+        function createSVGElement(tag, attrs) {
+            const elem = document.createElementNS(svgNS, tag);
+            if (attrs) {
+                Object.entries(attrs).forEach(([key, value]) => {
+                    elem.setAttributeNS(null, key, value);
+                });
+            }
+            return elem;
+        }
+        
+        // Clear existing content
+        icon.innerHTML = '';
+        
+        // Create icon based on theme
+        if (theme === 'light') {
+            // Sun icon
+            const circle = createSVGElement('circle', { cx: '12', cy: '12', r: '4' });
+            icon.appendChild(circle);
+            const rays = [
+                { x1: '12', y1: '1', x2: '12', y2: '3' },
+                { x1: '12', y1: '21', x2: '12', y2: '23' },
+                { x1: '4.22', y1: '4.22', x2: '5.64', y2: '5.64' },
+                { x1: '18.36', y1: '18.36', x2: '19.78', y2: '19.78' },
+                { x1: '1', y1: '12', x2: '3', y2: '12' },
+                { x1: '21', y1: '12', x2: '23', y2: '12' },
+                { x1: '4.22', y1: '19.78', x2: '5.64', y2: '18.36' },
+                { x1: '18.36', y1: '5.64', x2: '19.78', y2: '4.22' }
+            ];
+            rays.forEach(ray => {
+                const line = createSVGElement('line', ray);
+                icon.appendChild(line);
+            });
+        } else if (theme === 'dark') {
+            // Moon icon
+            const path = createSVGElement('path', { d: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' });
+            icon.appendChild(path);
+        } else {
+            // Rainbow icon
+            const arcs = [
+                { d: 'M2 12a10 10 0 0 1 20 0' },
+                { d: 'M4 12a8 8 0 0 1 16 0' },
+                { d: 'M6 12a6 6 0 0 1 12 0' },
+                { d: 'M8 12a4 4 0 0 1 8 0' }
+            ];
+            arcs.forEach(arc => {
+                const path = createSVGElement('path', arc);
+                icon.appendChild(path);
+            });
+        }
+        
+        // Update aria-label
+        const themeLabels = {
+            light: 'Switch to dark theme',
+            dark: 'Switch to colorful theme',
+            colorful: 'Switch to light theme'
+        };
+        switcher.setAttribute('aria-label', themeLabels[theme] || 'Switch theme');
+    }
+    
+    /**
+     * Create theme switcher button
+     */
+    function createThemeSwitcher() {
+        const switcher = document.createElement('button');
+        switcher.id = 'themeSwitcher';
+        switcher.className = 'theme-switcher';
+        switcher.setAttribute('aria-label', 'Switch theme');
+        switcher.setAttribute('type', 'button');
+        
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttributeNS(null, 'class', 'theme-switcher-icon');
+        icon.setAttributeNS(null, 'viewBox', '0 0 24 24');
+        icon.setAttributeNS(null, 'fill', 'none');
+        icon.setAttributeNS(null, 'stroke', 'currentColor');
+        icon.setAttributeNS(null, 'stroke-width', '2');
+        icon.setAttributeNS(null, 'stroke-linecap', 'round');
+        icon.setAttributeNS(null, 'stroke-linejoin', 'round');
+        
+        // Set initial icon content using proper SVG namespace
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const svgNS = 'http://www.w3.org/2000/svg';
+        
+        // Helper function to create SVG elements
+        function createSVGElement(tag, attrs) {
+            const elem = document.createElementNS(svgNS, tag);
+            if (attrs) {
+                Object.entries(attrs).forEach(([key, value]) => {
+                    elem.setAttributeNS(null, key, value);
+                });
+            }
+            return elem;
+        }
+        
+        // Clear any existing content
+        icon.innerHTML = '';
+        
+        // Create icon based on theme
+        if (currentTheme === 'light') {
+            // Sun icon
+            const circle = createSVGElement('circle', { cx: '12', cy: '12', r: '4' });
+            icon.appendChild(circle);
+            const rays = [
+                { x1: '12', y1: '1', x2: '12', y2: '3' },
+                { x1: '12', y1: '21', x2: '12', y2: '23' },
+                { x1: '4.22', y1: '4.22', x2: '5.64', y2: '5.64' },
+                { x1: '18.36', y1: '18.36', x2: '19.78', y2: '19.78' },
+                { x1: '1', y1: '12', x2: '3', y2: '12' },
+                { x1: '21', y1: '12', x2: '23', y2: '12' },
+                { x1: '4.22', y1: '19.78', x2: '5.64', y2: '18.36' },
+                { x1: '18.36', y1: '5.64', x2: '19.78', y2: '4.22' }
+            ];
+            rays.forEach(ray => {
+                const line = createSVGElement('line', ray);
+                icon.appendChild(line);
+            });
+        } else if (currentTheme === 'dark') {
+            // Moon icon
+            const path = createSVGElement('path', { d: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' });
+            icon.appendChild(path);
+        } else {
+            // Rainbow icon
+            const arcs = [
+                { d: 'M2 12a10 10 0 0 1 20 0' },
+                { d: 'M4 12a8 8 0 0 1 16 0' },
+                { d: 'M6 12a6 6 0 0 1 12 0' },
+                { d: 'M8 12a4 4 0 0 1 8 0' }
+            ];
+            arcs.forEach(arc => {
+                const path = createSVGElement('path', arc);
+                icon.appendChild(path);
+            });
+        }
+        
+        switcher.appendChild(icon);
+        switcher.addEventListener('click', cycleTheme);
+        
+        // Add keyboard support
+        switcher.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                cycleTheme();
+            }
+        });
+        
+        document.body.appendChild(switcher);
+        
+        // Update icon to ensure it's correct
+        updateThemeSwitcherIcon(currentTheme);
+    }
+    
+    // Initialize theme immediately (before DOM ready to prevent flash)
+    initTheme();
+    
+    // Create theme switcher when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', createThemeSwitcher);
+    } else {
+        createThemeSwitcher();
+    }
+
+    // ============================================
     // Menu Icons & Icon Utilities
     // ============================================
     const menuIcons = {

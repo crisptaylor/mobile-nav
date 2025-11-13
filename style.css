@@ -1,7 +1,30 @@
 /* ============================================
    CSS Custom Properties - Color Palette
+   Theme System: Light (default), Dark, Colorful
    ============================================ */
 :root {
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease-out;
+    --transition-base: 0.3s ease-out;
+    --transition-slow: 0.5s ease-out;
+    
+    /* Z-index layers */
+    --z-navbar: 1000;
+    --z-menu-overlay: 2000;
+    --z-bottom-navbar: 1000;
+    --z-theme-switcher: 1001;
+}
+
+/* Light Theme (Default) */
+:root,
+[data-theme="light"] {
     /* Primary blues - Soft pastel blues */
     --blue-light: #D4F1F4;
     --blue-medium: #B8E0D2;
@@ -25,22 +48,78 @@
     --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     
-    /* Spacing */
-    --spacing-xs: 0.5rem;
-    --spacing-sm: 1rem;
-    --spacing-md: 1.5rem;
-    --spacing-lg: 2rem;
-    --spacing-xl: 3rem;
+    /* Menu overlay gradient */
+    --menu-gradient: linear-gradient(135deg, var(--blue-light) 0%, var(--green-light) 100%);
+    --submenu-gradient: linear-gradient(135deg, var(--blue-light) 0%, var(--green-light) 100%);
     
-    /* Transitions */
-    --transition-fast: 0.15s ease-out;
-    --transition-base: 0.3s ease-out;
-    --transition-slow: 0.5s ease-out;
+    /* CTA button gradient */
+    --cta-gradient: linear-gradient(135deg, var(--blue-dark) 0%, var(--green-medium) 100%);
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    /* Primary blues - Darker, muted blues */
+    --blue-light: #1a2a3a;
+    --blue-medium: #2a3a4a;
+    --blue-dark: #3a4a5a;
     
-    /* Z-index layers */
-    --z-navbar: 1000;
-    --z-menu-overlay: 2000;
-    --z-bottom-navbar: 1000;
+    /* Accent greens - Darker greens */
+    --green-light: #2a3a2a;
+    --green-medium: #3a4a3a;
+    
+    /* Background colors */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    
+    /* Text colors */
+    --text-primary: #e0e0e0;
+    --text-secondary: #ffffff;
+    --text-light: rgba(224, 224, 224, 0.7);
+    
+    /* Interactive elements */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+    
+    /* Menu overlay gradient */
+    --menu-gradient: linear-gradient(135deg, #1a2a3a 0%, #2a3a2a 100%);
+    --submenu-gradient: linear-gradient(135deg, #1a2a3a 0%, #2a3a2a 100%);
+    
+    /* CTA button gradient */
+    --cta-gradient: linear-gradient(135deg, #3a4a5a 0%, #4a5a6a 100%);
+}
+
+/* Colorful Theme */
+[data-theme="colorful"] {
+    /* Primary blues - Vibrant blues */
+    --blue-light: #8B5CF6;
+    --blue-medium: #A78BFA;
+    --blue-dark: #7C3AED;
+    
+    /* Accent greens - Vibrant pinks/oranges */
+    --green-light: #EC4899;
+    --green-medium: #F97316;
+    
+    /* Background colors */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #FEF3C7;
+    
+    /* Text colors */
+    --text-primary: #1F2937;
+    --text-secondary: #111827;
+    --text-light: rgba(31, 41, 55, 0.8);
+    
+    /* Interactive elements */
+    --shadow-sm: 0 2px 4px rgba(139, 92, 246, 0.2);
+    --shadow-md: 0 4px 8px rgba(139, 92, 246, 0.3);
+    --shadow-lg: 0 8px 16px rgba(139, 92, 246, 0.4);
+    
+    /* Menu overlay gradient */
+    --menu-gradient: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #F97316 100%);
+    --submenu-gradient: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #F97316 100%);
+    
+    /* CTA button gradient */
+    --cta-gradient: linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #F97316 100%);
 }
 
 /* ============================================
@@ -67,6 +146,7 @@ body {
     padding-top: 60px; /* Space for fixed top navbar */
     padding-bottom: 80px; /* Space for fixed bottom navbar */
     min-height: 100vh;
+    transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 /* ============================================
@@ -86,6 +166,7 @@ body {
     padding: 0 var(--spacing-md);
     z-index: var(--z-navbar);
     will-change: transform;
+    transition: background-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .logo {
@@ -93,6 +174,7 @@ body {
     font-weight: 600;
     color: var(--text-primary);
     order: 1;
+    transition: color var(--transition-base);
 }
 
 /* Hamburger Menu Button */
@@ -125,7 +207,7 @@ body {
     height: 2px;
     background-color: var(--text-primary);
     border-radius: 2px;
-    transition: all var(--transition-base);
+    transition: all var(--transition-base), background-color var(--transition-base);
     transform-origin: center;
 }
 
@@ -151,7 +233,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, var(--blue-light) 0%, var(--green-light) 100%);
+    background: var(--menu-gradient);
     backdrop-filter: blur(10px);
     z-index: var(--z-menu-overlay);
     display: flex;
@@ -162,7 +244,8 @@ body {
     transform: translateY(-100%);
     transition: opacity var(--transition-base), 
                 visibility var(--transition-base),
-                transform var(--transition-base);
+                transform var(--transition-base),
+                background var(--transition-base);
     will-change: transform, opacity;
     overflow: hidden;
 }
@@ -524,11 +607,12 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, var(--blue-light) 0%, var(--green-light) 100%);
+    background: var(--submenu-gradient);
     z-index: 2001;
     transform: translateX(100%);
     transition: transform var(--transition-base) ease-out,
-                opacity var(--transition-base) ease-out;
+                opacity var(--transition-base) ease-out,
+                background var(--transition-base);
     will-change: transform, opacity;
     display: flex;
     flex-direction: column;
@@ -718,7 +802,8 @@ body {
     margin-bottom: var(--spacing-md);
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-fast),
-                box-shadow var(--transition-fast);
+                box-shadow var(--transition-fast),
+                background-color var(--transition-base);
     will-change: transform;
 }
 
@@ -755,6 +840,7 @@ body {
     padding-bottom: calc(var(--spacing-xs) + env(safe-area-inset-bottom)); /* iOS safe area */
     z-index: var(--z-bottom-navbar);
     will-change: transform;
+    transition: background-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .nav-item {
@@ -819,7 +905,7 @@ body {
 
 /* CTA Button */
 .cta-button {
-    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--green-medium) 100%);
+    background: var(--cta-gradient);
     color: white;
     border: none;
     border-radius: 24px;
@@ -831,10 +917,106 @@ body {
     box-shadow: var(--shadow-md);
     transition: transform var(--transition-fast),
                 box-shadow var(--transition-fast),
-                opacity var(--transition-fast);
+                opacity var(--transition-fast),
+                background var(--transition-base);
     will-change: transform;
     position: relative;
     overflow: hidden;
+}
+
+/* ============================================
+   Theme Switcher Button
+   ============================================ */
+.theme-switcher {
+    position: fixed;
+    bottom: 90px; /* Above bottom navbar (70px height + 20px spacing) */
+    right: var(--spacing-md);
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    background-color: var(--bg-primary);
+    border: 2px solid var(--blue-dark);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-theme-switcher);
+    transition: all var(--transition-base);
+    will-change: transform, background-color, border-color;
+    padding: 0;
+}
+
+.theme-switcher:hover,
+.theme-switcher:focus {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+    outline: none;
+}
+
+.theme-switcher:active {
+    transform: scale(0.95);
+}
+
+.theme-switcher:focus-visible {
+    outline: 2px solid var(--blue-dark);
+    outline-offset: 2px;
+}
+
+.theme-switcher-icon {
+    width: 24px;
+    height: 24px;
+    stroke: var(--text-primary);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke var(--transition-base), transform var(--transition-base);
+}
+
+.theme-switcher:hover .theme-switcher-icon {
+    transform: rotate(15deg);
+}
+
+/* Theme-specific icon styles */
+[data-theme="light"] .theme-switcher-icon {
+    /* Sun icon for light theme */
+    stroke: var(--text-primary);
+}
+
+[data-theme="dark"] .theme-switcher-icon {
+    /* Moon icon for dark theme */
+    stroke: var(--text-primary);
+}
+
+[data-theme="colorful"] .theme-switcher-icon {
+    /* Palette icon for colorful theme */
+    stroke: var(--text-primary);
+}
+
+/* Responsive adjustments for theme switcher */
+@media (min-width: 768px) {
+    .theme-switcher {
+        bottom: 100px; /* Above bottom navbar (80px height + 20px spacing) */
+        right: var(--spacing-lg);
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+        min-height: 52px;
+    }
+    
+    .theme-switcher-icon {
+        width: 26px;
+        height: 26px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .theme-switcher {
+        right: calc(50% - 450px + var(--spacing-lg)); /* Align with content area */
+    }
 }
 
 .cta-button::before {

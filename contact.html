@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Contact - Web Developer Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Prevent flash of unstyled content - apply theme immediately
+        (function() {
+            const theme = localStorage.getItem('portfolio-theme') || 
+                         (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
     <!-- Top Navbar -->
